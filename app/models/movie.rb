@@ -1,10 +1,33 @@
 class Movie < ApplicationRecord
-  def self.searchMovies(query)
+
+  def self.getNowPlaying
+    data = JSON.parse(RestClient.get("#{BASE_URL}/movie/now_playing", {
+      params: {
+        api_key: "#{ENV["TMDB_API_KEY"]}",
+        language: "en-US",
+        page: 1
+      }
+    }))
+    movies = data["results"].map {|movie| parse_data(movie, false)}
+  end
+
+  def self.getPopular
+    data = JSON.parse(RestClient.get("#{BASE_URL}/movie/popular", {
+      params: {
+        api_key: "#{ENV["TMDB_API_KEY"]}",
+        language: "en-US",
+        page: 1
+      }
+    }))
+    movies = data["results"].map {|movie| parse_data(movie, false)}
+  end
+
+  def self.searchMovies(query, page = 1)
     JSON.parse(RestClient.get("#{BASE_URL}/search/movie", {
       params: {
         api_key: "#{ENV["TMDB_API_KEY"]}",
         language: "en-US",
-        page: 1,
+        page: page,
         query: query
       }
     }))
@@ -35,11 +58,11 @@ class Movie < ApplicationRecord
     end["name"]
   end
 
-  def self.parse_data(data)
+  def self.parse_data(data, query = true)
     parsed_data = {
       id: data["id"],
       title: data["title"],
-      director: self.get_director(data["credits"]["crew"]),
+      director: query ? self.get_director(data["credits"]["crew"]) : nil,
       overview: data["overview"],
       runtime: "#{data["runtime"]} mins",
       released: data["release_date"].split("-")[0],

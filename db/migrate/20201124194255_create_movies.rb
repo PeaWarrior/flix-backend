@@ -7,9 +7,8 @@ class CreateMovies < ActiveRecord::Migration[6.0]
       t.integer :released
       t.string :runtime
       t.string :poster
-      t.string :backdrop
-      t.integer :likes
-      t.integer :dislikes
+      t.integer :likes, default: 0
+      t.integer :dislikes, default: 0
 
       t.timestamps
     end

@@ -12,6 +12,31 @@
 
 ActiveRecord::Schema.define(version: 2020_11_24_194255) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.bigint "stock_id", null: false
+    t.string "category"
+    t.float "price"
+    t.float "shares"
+    t.float "remaining"
+    t.date "date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stock_id"], name: "index_activities_on_stock_id"
+  end
+
+  create_table "funds", force: :cascade do |t|
+    t.bigint "portfolio_id", null: false
+    t.string "category", null: false
+    t.float "amount", null: false
+    t.date "date", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["portfolio_id"], name: "index_funds_on_portfolio_id"
+  end
+
   create_table "movies", force: :cascade do |t|
     t.string "title"
     t.string "director"
@@ -19,11 +44,38 @@ ActiveRecord::Schema.define(version: 2020_11_24_194255) do
     t.integer "released"
     t.string "runtime"
     t.string "poster"
-    t.string "backdrop"
-    t.integer "likes"
-    t.integer "dislikes"
+    t.integer "likes", default: 0
+    t.integer "dislikes", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "portfolios", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_portfolios_on_user_id"
+  end
+
+  create_table "stocks", force: :cascade do |t|
+    t.bigint "portfolio_id", null: false
+    t.string "name"
+    t.string "ticker"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["portfolio_id"], name: "index_stocks_on_portfolio_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "activities", "stocks"
+  add_foreign_key "funds", "portfolios"
+  add_foreign_key "portfolios", "users"
+  add_foreign_key "stocks", "portfolios"
 end
