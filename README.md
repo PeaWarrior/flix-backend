@@ -81,3 +81,5 @@ If you want to use a different port, make sure you change the
 src/utilities/constants.js
 ``` 
 in the [Frontend](https://github.com/PeaWarrior/flix-frontend) to fetch from the right port.
+
+FLIX is released under the [MIT License](https://opensource.org/licenses/MIT).
