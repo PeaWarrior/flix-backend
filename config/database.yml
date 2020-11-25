@@ -23,7 +23,7 @@ default: &default
 
 development:
   <<: *default
-  database: mod_5_backend_development
+  database: flix_backend_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: mod_5_backend_test
+  database: flix_backend_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: mod_5_backend_production
-  username: mod_5_backend
-  password: <%= ENV['MOD_5_BACKEND_DATABASE_PASSWORD'] %>
+  database: flix_backend_production
+  username: flix_backend
+  password: <%= ENV['FLIX_BACKEND_DATABASE_PASSWORD'] %>
