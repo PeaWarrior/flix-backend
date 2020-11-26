@@ -35,20 +35,45 @@ class Movie < ApplicationRecord
 
   def self.find_or_get_by(id)
     movie = Movie.find_by(id: id)
+    recommended = []
+    
     if !movie
-      data = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{id}", {
-        params: {
-          api_key: "#{ENV["TMDB_API_KEY"]}",
-          language: "en-US",
-          append_to_response: 'credits'
-        }
-      }))
+      data = self.get_movie_and_recommended_movies(id)
 
       movie_params = self.parse_data(data)
       movie = Movie.create(movie_params)
+      
+      recommended_movies = data["recommendations"]["results"].map do |movie|
+        self.parse_data(movie, false)
+      end
+    else
+      recommended_movies = self.get_recommended_movies(id)
     end
     
-    movie
+    all_movies = {
+      movie: movie,
+      recommended: recommended_movies
+    }
+  end
+
+  def self.get_movie_and_recommended_movies(id)
+    JSON.parse(RestClient.get("#{BASE_URL}/movie/#{id}", {
+      params: {
+        api_key: "#{ENV["TMDB_API_KEY"]}",
+        language: "en-US",
+        append_to_response: 'credits,recommendations'
+      }
+    }))
+  end
+
+  def self.get_recommended_movies(id)
+    data = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{id}/recommendations", {
+      params: {
+        api_key: "#{ENV["TMDB_API_KEY"]}"
+      }
+    }))
+    
+    recommended = data["results"].map {|movie| self.parse_data(movie, false)}
   end
 
   private
