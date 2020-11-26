@@ -76,10 +76,6 @@ $ rails s -p 3001
 
 This will start the server on port 3001 which can be accessed at http://localhost:3001.
 
-If you want to use a different port, make sure you change the 
-```
-src/utilities/constants.js
-``` 
-in the [Frontend](https://github.com/PeaWarrior/flix-frontend) to fetch from the right port.
+If you want to use a different port, make sure you change the `src/utilities/constants.js` file in the [Frontend](https://github.com/PeaWarrior/flix-frontend) to fetch from the right port.
 
 FLIX is released under the [MIT License](https://opensource.org/licenses/MIT).
