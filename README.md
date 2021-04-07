@@ -6,6 +6,8 @@ This is the Rails Backend API for **FLIX**.
 
 You can access the FLIX Frontend [here](https://github.com/PeaWarrior/flix-frontend).
 
+### Live website [here](http://flix-20.herokuapp.com/).
+
 
 ## Prerequisites
 
